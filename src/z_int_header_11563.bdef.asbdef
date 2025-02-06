@@ -1,0 +1,61 @@
+unmanaged implementation in class zbp_int_header_11563 unique;
+strict ( 2 );
+
+define behavior for Z_INT_HEADER_11563 alias _header
+//late numbering
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+  mapping for ztm_header_11563 control ztm_header_str
+    {
+//    Every Field will have CONTROL STRUCTURE ASSOCIATED
+      Docno = docno;
+      CompCd    = comp_cd;
+      PurchOrg    = purch_org;
+      Currency       = currency;
+      Status         = status;
+      SupplierNo = supplier_no;
+      ChangedAt      = changed_at;
+      CreatedAt      = created_at;
+      CreatedBy      = created_by;
+      LocalLastChangedAt = locallastchangedat;
+    }
+  field ( readonly ) Docno;
+  field ( mandatory ) SupplierNo;
+
+  association _item { create; }
+
+
+}
+
+define behavior for Z_INT_ITEM_11563 //alias <alias_name>
+//late numbering
+lock dependent by _header
+authorization dependent by _header
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( mandatory: create )ItemNo;
+  field ( readonly ) Docno;
+
+
+  mapping for ztd_item_11563
+    {
+      Docno = docno;
+      ItemNo     = item_no;
+      Status         = status;
+      Quantity       = quantity;
+      Currency       = currency;
+      ItemAmt         = item_amt;
+      TaxAmt      = tax_amt;
+      ChangedAt      = changed_at;
+      CreatedAt      = created_at;
+      CreatedBy      = created_by;
+    }
+     association _header;
+}
